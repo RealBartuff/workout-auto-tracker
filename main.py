@@ -5,7 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Run keypoint detection')
 parser.add_argument("--device", default="cpu", help="Device to inference on")
-parser.add_argument("--video_file", default="interrupt.mp4", help="Input Video")
+parser.add_argument("--video_file", default="test.mp4", help="Input Video")
 t_sum = 0
 
 args = parser.parse_args()
