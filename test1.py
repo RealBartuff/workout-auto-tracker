@@ -20,7 +20,7 @@ while True:
             height, width, c = img.shape
             print(id, lm)
             cx, cy = int(lm.x * width), int(lm.y * height)
-            cv2.circle(img, (cx, cy), 5, (255,0,0), cv2.FILLED)
+            cv2.circle(img, (cx, cy), 7, (255,0,0), cv2.FILLED)
 
 
     cTime = time.time()
