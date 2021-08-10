@@ -40,9 +40,14 @@ class PoseDetector():
         x2, y2 = self.lm_list[p2][1:]
         x3, y3 = self.lm_list[p3][1:]
         if draw:
-            cv2.circle(img, (x1, y1), 7, (255, 0, 0), cv2.FILLED)
-            cv2.circle(img, (x2, y2), 7, (255, 0, 0), cv2.FILLED)
-            cv2.circle(img, (x3, y3), 7, (255, 0, 0), cv2.FILLED)
+            cv2.line(img, (x1, y2), (x2, y2), (255, 255, 255), 3)   # wyszczegolnienie wyznaczonych elementow
+            cv2.line(img, (x3, y3), (x2, y2), (255, 255, 255), 3)
+            cv2.circle(img, (x1, y1), 7, (0, 0, 255), cv2.FILLED)
+            cv2.circle(img, (x1, y1), 10, (0, 0, 255), 2)
+            cv2.circle(img, (x2, y2), 7, (0, 0, 255), cv2.FILLED)
+            cv2.circle(img, (x2, y2), 10, (0, 0, 255), 2)
+            cv2.circle(img, (x3, y3), 7, (0, 0, 255), cv2.FILLED)
+            cv2.circle(img, (x3, y3), 10, (0, 0, 255), 2)
 
 
 def main():
