@@ -7,6 +7,7 @@ cap = cv2.VideoCapture("videos/przysiad1.mp4")
 detector = pm.PoseDetector()
 counter = 0
 direction = 0
+p_time = 0
 
 while True:
     success, img = cap.read()
@@ -35,6 +36,12 @@ while True:
 
         # wyświetlanie powtórzeń na obrazie
         cv2.putText(img, f"{counter}", (50, 200), cv2.FONT_HERSHEY_PLAIN, 15, (255, 0, 0), 5)
+
+    # wyświetlanie fps
+    # c_time = time.time()
+    # fps =1/(c_time - p_time)
+    # p_time = c_time
+    # cv2.putText(img, f"{fps}", (50, 200), cv2.FONT_HERSHEY_PLAIN, 15, (255, 0, 0), 5)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
