@@ -13,7 +13,10 @@ while True:
     img = detector.find_pose(img, draw=False)
     lm_list = detector.get_position(img, False)
     if len(lm_list) != 0:
+        # lewa noga
         detector.find_angle(img, 23, 25, 27)    #trzy punkty do określenia kąta ze wzoru mediapipe
+        # # prawa noga
+        # detector.find_angle(img, 24, 26, 28)
 
 
     cv2.imshow("Image", img)
