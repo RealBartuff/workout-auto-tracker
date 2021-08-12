@@ -39,7 +39,7 @@ while True:
         # print(counter)
 
         # wyświetlanie powtórzeń na obrazie
-        cv2.putText(img, f"{counter}", (50, 200), cv2.FONT_HERSHEY_PLAIN, 15, (255, 0, 0), 5)
+        cv2.putText(img, f"{counter}", (50, 200), cv2.FONT_HERSHEY_PLAIN, 10, (255, 0, 0), 5)
 
     # wyświetlanie fps
     # c_time = time.time()
