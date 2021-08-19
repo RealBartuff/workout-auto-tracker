@@ -17,23 +17,6 @@ class Design(GridLayout):
         super(Design, self).__init__(**kwargs)
         self.cols = 1
 
-        self.inside = GridLayout()
-        self.inside.cols = 2
-
-        self.inside.add_widget(Label(text="First Name: "))
-        self.name = TextInput(multiline=False)
-        self.inside.add_widget(self.name)
-
-        self.inside.add_widget(Label(text="Last Name: "))
-        self.last_name = TextInput(multiline=False)
-        self.inside.add_widget(self.last_name)
-
-        self.inside.add_widget(Label(text="Email: "))
-        self.email = TextInput(multiline=False)
-        self.inside.add_widget(self.email)
-
-        self.add_widget(self.inside)
-
         self.start_btn = Button(text="START TRAINING",
                                 font_size=20
                                 )
@@ -50,8 +33,8 @@ class Design(GridLayout):
         Exercises.run_program()
 
     def pause(self, instance):
-        print("Stop")
-        sys.exit()
+        while True:
+            break
 
 
 class MyApp(App):
