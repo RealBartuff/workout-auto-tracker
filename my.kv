@@ -1,7 +1,42 @@
 #:kivy 2.0.0
 
-<MyApp>:
-    MyRootWidget:
-        BoxLayout:
-            Button:
-            Button:
+WindowManager:
+    Menu:
+    WorkingScreen:
+    Calendar:
+
+<Menu>:
+    name: "Menu"
+
+    GridLayout:
+        cols: 1
+        size: root.width - 400, root.height - 400
+        pos: 200, 200
+
+    Button:
+        size_hint: 0.25, 0.25
+        pos_hint: {"x": 0.4, "y": 0.6}
+        text: "START WORKOUT"
+        on_release: root.start_btn()
+
+    Button:
+        size_hint: 0.25, 0.25
+        pos_hint: {"x": 0.4, "y": 0.3}
+        text: "CALENDAR"
+        on_release:
+            app.root.current = "Calendar"
+            root.manager.transition.direction = "left"
+
+<WorkingScreen>:
+    name: "Workout"
+
+<Calendar>:
+    name: "Calendar"
+
+    Button:
+        size_hint: 0.25, 0.25
+        pos_hint: {"x": 0.4, "y": 0.3}
+        text: "Go Back"
+        on_release:
+            app.root.current = "Menu"
+            root.manager.transition.direction = "right"

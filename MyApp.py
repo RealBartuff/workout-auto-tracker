@@ -5,42 +5,40 @@ import Exercises
 kivy.require('2.0.0')
 
 from kivy.app import App
-from kivy.uix.label import Label
 from kivy.uix.widget import Widget
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 
-class Design(GridLayout):
-    def __init__(self, **kwargs):
-        super(Design, self).__init__(**kwargs)
-        self.cols = 1
+class WindowManager(ScreenManager):
+    pass
 
-        self.start_btn = Button(text="START TRAINING",
-                                font_size=20
-                                )
-        self.start_btn.bind(on_press=self.start_workout)
-        self.add_widget(self.start_btn)
-        self.stop_btn = Button(text="STOP",
-                               font_size=20
-                               )
-        self.stop_btn.bind(on_press=self.pause)
-        self.add_widget(self.stop_btn)
 
-    def start_workout(self, instance):
+class Menu(Screen, Widget):
+    def start_btn(self):
         print("Running...")
         Exercises.run_program()
 
-    def pause(self, instance):
-        while True:
-            break
+    def stop_btn(self):
+        print("Stop")
+        return
 
 
-class MyApp(App):
+class WorkingScreen(Screen):
+    pass
+
+
+class Calendar(Screen):
+    pass
+
+
+kv = Builder.load_file("my.kv")
+
+
+class MyMainApp(App):
     def build(self):
-        return Design()
+        return kv
 
 
 if __name__ == '__main__':
-    MyApp().run()
+    MyMainApp().run()
