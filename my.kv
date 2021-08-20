@@ -15,9 +15,11 @@ WindowManager:
 
     Button:
         size_hint: 0.25, 0.25
-        pos_hint: {"x": 0.4, "y": 0.6}
+        pos_hint: {"x": 0.4, "y": 0.55}
         text: "START WORKOUT"
-        on_release: root.start_btn()
+        on_release:
+            app.root.current = "Workout"
+            root.manager.transition.direction = "left"
 
     Button:
         size_hint: 0.25, 0.25
@@ -29,6 +31,25 @@ WindowManager:
 
 <WorkingScreen>:
     name: "Workout"
+    Image:
+        source: 'Exercises.cap'
+        size: self.width, self.height
+
+    Button:
+        size_hint: 0.25, 0.25
+        pos_hint: {"x": 0.25, "top":1}
+        text: "GO BACK"
+        on_release:
+            app.root.current = "Menu"
+            root.manager.transition.direction = "right"
+
+    Button:
+        size_hint: 0.25, 0.25
+        pos_hint: {"x": 0.5, "top":1}
+        text: "STOP"
+        on_release:
+            app.root.current = "Menu"
+            root.manager.transition.direction = "right"
 
 <Calendar>:
     name: "Calendar"
