@@ -3,6 +3,9 @@ import kivy
 kivy.require('2.0.0')
 
 import kivy.core.text
+import numpy as np
+import time
+import PoseModule as pm
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.base import EventLoop
@@ -14,6 +17,12 @@ from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
 from kivy.clock import Clock
 import cv2
+
+detector = pm.PoseDetector()
+
+p_time = 0
+counter = 0
+direction = 0
 
 
 class WindowManager(ScreenManager):

@@ -55,6 +55,7 @@ WindowManager:
                 pos_hint: {"x": 0.5, "top":1}
                 text: "STOP"
                 on_release:
+                    root.doexit()
                     app.root.current = "Menu"
                     root.manager.transition.direction = "right"
 
