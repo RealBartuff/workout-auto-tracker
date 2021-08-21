@@ -31,25 +31,38 @@ WindowManager:
 
 <WorkingScreen>:
     name: "Workout"
-    Image:
-        source: 'Exercises.cap'
-        size: self.width, self.height
 
-    Button:
-        size_hint: 0.25, 0.25
-        pos_hint: {"x": 0.25, "top":1}
-        text: "GO BACK"
-        on_release:
-            app.root.current = "Menu"
-            root.manager.transition.direction = "right"
+    BoxLayout:
+        orientation: "vertical"
 
-    Button:
-        size_hint: 0.25, 0.25
-        pos_hint: {"x": 0.5, "top":1}
-        text: "STOP"
-        on_release:
-            app.root.current = "Menu"
-            root.manager.transition.direction = "right"
+        Label:
+            height: 20
+            size_hint_y: None
+            text: 'Testing the camera'
+
+        KivyCamera:
+            id: qrcam
+
+        BoxLayout:
+            orientation: "horizontal"
+            height: 20
+            size_hint_y: None
+
+            Button:
+                size_hint: 0.25, 0.25
+                pos_hint: {"x": 0.25, "top":1}
+                text: "START"
+                on_release:
+                    app.root.current = "Menu"
+                    root.manager.transition.direction = "right"
+
+            Button:
+                size_hint: 0.25, 0.25
+                pos_hint: {"x": 0.5, "top":1}
+                text: "STOP"
+                on_release:
+                    app.root.current = "Menu"
+                    root.manager.transition.direction = "right"
 
 <Calendar>:
     name: "Calendar"
