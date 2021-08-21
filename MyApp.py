@@ -20,10 +20,6 @@ import cv2
 
 detector = pm.PoseDetector()
 
-p_time = 0
-counter = 0
-direction = 0
-
 
 class WindowManager(ScreenManager):
     pass
@@ -37,18 +33,20 @@ class KivyCamera(Image):
 
     def __init__(self, **kwargs):
         super(KivyCamera, self).__init__(**kwargs)
-        self.capture = None
+        self.cap = None
 
-    def start(self, capture, fps=30):
-        self.capture = capture
+    def start(self, cap, fps=30):
+        self.cap = cap
         Clock.schedule_interval(self.update, 1.0 / fps)
 
     def stop(self):
         Clock.unschedule_interval(self.update)
-        self.capture = None
+        self.cap = None
 
     def update(self, dt):
-        return_value, frame = self.capture.read()
+        return_value, frame = self.cap.read()
+        img = detector.find_pose(frame, draw=True)
+        lm_list = detector.get_position(frame, False)
         if return_value:
             texture = self.texture
             w, h = frame.shape[1], frame.shape[0]
@@ -67,14 +65,14 @@ class WorkingScreen(Screen, BoxLayout):
             pass
 
         def dostart(self, *largs):
-            global capture
-            capture = cv2.VideoCapture(0)
-            self.ids.qrcam.start(capture)
+            global cap
+            cap = cv2.VideoCapture(0)
+            self.ids.qrcam.start(cap)
 
         def doexit(self):
-            global capture
-            if capture != None:
-                capture.release()
+            global cap
+            if cap != None:
+                cap.release()
                 capture = None
             EventLoop.close()
 
