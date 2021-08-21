@@ -44,9 +44,25 @@ class KivyCamera(Image):
         self.cap = None
 
     def update(self, dt):
+        counter = 0
+        direction = 0
         return_value, frame = self.cap.read()
         img = detector.find_pose(frame, draw=True)
         lm_list = detector.get_position(frame, False)
+        if len(lm_list) != 0:
+            angle = detector.find_angle(img, 11, 13, 15)  # trzy punkty do określenia kąta ze wzoru mediapipe
+            squat_formula = (lm_list[13][2] - lm_list[11][2]) / (lm_list[15][2] - lm_list[13][2])
+            percent = np.interp(angle, (170, 110), (0, 100))  # zakres ruchu w procentach
+            if squat_formula > 0.9:
+                if direction == 0:
+                    # counter += 0.5
+                    direction = 1
+            if squat_formula < 0.4:
+                if direction == 1:
+                    counter += 1
+                    direction = 0
+            # wyświetlanie powtórzeń na obrazie
+            cv2.putText(img, f"{counter}", (50, 200), cv2.FONT_HERSHEY_DUPLEX, 5, (255, 0, 0), 5)
         if return_value:
             texture = self.texture
             w, h = frame.shape[1], frame.shape[0]
@@ -55,7 +71,6 @@ class KivyCamera(Image):
                 texture.flip_vertical()
             texture.blit_buffer(frame.tobytes(), colorfmt='bgr')
             self.canvas.ask_update()
-
 
 capture = None
 
