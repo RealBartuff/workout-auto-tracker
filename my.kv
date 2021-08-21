@@ -32,29 +32,23 @@ WindowManager:
 <WorkingScreen>:
     name: "Workout"
 
-    BoxLayout:
-        orientation: "vertical"
-
-        Label:
-            height: 20
-            size_hint_y: None
-            text: 'Testing the camera'
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
 
         KivyCamera:
             id: qrcam
 
-        BoxLayout:
-            orientation: "horizontal"
-            height: 20
-            size_hint_y: None
+        GridLayout:
+            cols: 2
+            size_hint: 1, 0.2
 
             Button:
                 size_hint: 0.25, 0.25
                 pos_hint: {"x": 0.25, "top":1}
                 text: "START"
                 on_release:
-                    app.root.current = "Menu"
-                    root.manager.transition.direction = "right"
+                    root.dostart()
 
             Button:
                 size_hint: 0.25, 0.25

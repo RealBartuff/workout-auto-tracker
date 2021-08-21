@@ -50,8 +50,24 @@ class KivyCamera(Image):
             self.canvas.ask_update()
 
 
-class WorkingScreen(Screen):
-    pass
+capture = None
+
+
+class WorkingScreen(Screen, BoxLayout):
+        def init_qrtest(self):
+            pass
+
+        def dostart(self, *largs):
+            global capture
+            capture = cv2.VideoCapture(0)
+            self.ids.qrcam.start(capture)
+
+        def doexit(self):
+            global capture
+            if capture != None:
+                capture.release()
+                capture = None
+            EventLoop.close()
 
 
 class Calendar(Screen):
