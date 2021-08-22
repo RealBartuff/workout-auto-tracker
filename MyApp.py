@@ -73,7 +73,8 @@ class KivyCamera(Image):
             texture.blit_buffer(frame.tobytes(), colorfmt='bgr')
             self.canvas.ask_update()
 
-capture = None
+
+cap = None
 
 
 class WorkingScreen(Screen, BoxLayout):
@@ -89,7 +90,7 @@ class WorkingScreen(Screen, BoxLayout):
             global cap
             if cap != None:
                 cap.release()
-                capture = None
+                cap = None
             EventLoop.close()
 
 

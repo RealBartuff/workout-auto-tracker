@@ -63,10 +63,39 @@ WindowManager:
 <Calendar>:
     name: "Calendar"
 
-    Button:
-        size_hint: 0.25, 0.25
-        pos_hint: {"x": 0.4, "y": 0.3}
-        text: "Go Back"
-        on_release:
-            app.root.current = "Menu"
-            root.manager.transition.direction = "right"
+    GridLayout:
+        cols: 7
+        size: root.width, root.height
+
+        Button:
+            text: "Date 1"
+
+        Button:
+            text: "Date 2"
+
+        Button:
+            text: "Date 3"
+
+        Button:
+            text: "Date 4"
+
+        Button:
+            text: "Date 5"
+
+        Button:
+            text: "Date 6"
+
+        Button:
+            text: "Date 7"
+
+    GridLayout:
+        cols: 1
+        size_hint: 1, 0.2
+
+        Button:
+            size_hint: 0.25, 0.25
+            pos_hint: {"x": 0.4, "y": 0.01}
+            text: "Go Back"
+            on_release:
+                app.root.current = "Menu"
+                root.manager.transition.direction = "right"
