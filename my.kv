@@ -7,6 +7,12 @@ WindowManager:
 
 <Menu>:
     name: "Menu"
+    canvas.before:
+        Color:
+            rgba: (0, 0, 0, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
     GridLayout:
         cols: 1
@@ -64,29 +70,13 @@ WindowManager:
     name: "Calendar"
 
     GridLayout:
-        cols: 7
+        cols: 1
         size: root.width, root.height
 
         Button:
-            text: "Date 1"
-
-        Button:
-            text: "Date 2"
-
-        Button:
-            text: "Date 3"
-
-        Button:
-            text: "Date 4"
-
-        Button:
-            text: "Date 5"
-
-        Button:
-            text: "Date 6"
-
-        Button:
-            text: "Date 7"
+            text: "Open calendar"
+            pos_hint: {"center_x": .5, "center_t": .5}
+            on_release: root.show_cal()
 
     GridLayout:
         cols: 1

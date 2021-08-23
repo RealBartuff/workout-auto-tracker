@@ -12,6 +12,8 @@ from kivy.base import EventLoop
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.picker import MDDatePicker
+from kivymd.app import MDApp
 from kivy.core.window import Window
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
@@ -95,13 +97,15 @@ class WorkingScreen(Screen, BoxLayout):
 
 
 class Calendar(Screen):
-    pass
+    def show_cal(self):
+        cal = MDDatePicker()
+        cal.open()
 
 
 kv = Builder.load_file("my.kv")
 
 
-class MyMainApp(App):
+class MyMainApp(MDApp):
     def build(self):
         return kv
 
