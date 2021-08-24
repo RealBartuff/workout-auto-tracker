@@ -91,7 +91,11 @@ WindowManager:
     name: "Calendar"
     BoxLayout:
         orientation: "vertical"
-        size: root.width, root.height
+        size: root.width, root.height - 200
+
+        Label:
+            id: push_ups
+            text: "0% Daily Push-ups Goal"
 
         ProgressBar:
             id: circle_bar
@@ -99,6 +103,21 @@ WindowManager:
             max: 1
             pos_hint: {"x": .1}
             size_hint_x: .8
+
+        Label:
+            id: sit_ups
+            text: "0% Daily Sit-ups Goal"
+
+        ProgressBar:
+            id: line_bar
+            min: 0
+            max: 1
+            pos_hint: {"x": .1}
+            size_hint_x: .8
+
+        Label:
+            id: sit_ups
+            text: ""
 
     GridLayout:
         cols: 1

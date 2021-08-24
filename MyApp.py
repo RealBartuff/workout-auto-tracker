@@ -117,6 +117,17 @@ class WorkingScreen(Screen, BoxLayout):
 class Calendar(Screen, Widget):
     def push_counter(self):
         current = self.ids.circle_bar.value
+        current += 0.25
+        self.ids.circle_bar.value = current
+        # update the label
+        self.ids.push_ups.text = f"{int(current*100)}"
+
+    def sit_counter(self):
+        current = self.ids.line_bar.value
+        current += 0.25
+        self.ids.line_bar.value = current
+        # update the label
+        self.ids.sit_ups.text = f"{int(current*100)}"
 
 
 kv = Builder.load_file("my.kv")
