@@ -37,6 +37,12 @@ WindowManager:
 
 <WorkingScreen>:
     name: "Workout"
+    canvas.before:
+        Color:
+            rgba: (0, 0, 0, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
     GridLayout:
         cols: 1
@@ -47,7 +53,7 @@ WindowManager:
             allow_stretch: True
 
         GridLayout:
-            cols: 2
+            cols: 3
             size_hint: 1, 0.2
 
             Button:
@@ -62,12 +68,26 @@ WindowManager:
                 pos_hint: {"x": 0.5, "top":1}
                 text: "STOP"
                 on_release:
+                    app.root.current = "Menu"
+                    root.manager.transition.direction = "right"
                     root.doexit()
+
+            Button:
+                size_hint: 0.25, 0.25
+                pos_hint: {"x": 0.75, "top":1}
+                text: "GO BACK"
+                on_release:
                     app.root.current = "Menu"
                     root.manager.transition.direction = "right"
 
 <Calendar>:
     name: "Calendar"
+    canvas.before:
+        Color:
+            rgba: (0, 0, 0, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
     GridLayout:
         cols: 1

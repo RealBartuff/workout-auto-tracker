@@ -38,13 +38,15 @@ class KivyCamera(Image):
         self.cap = None
         self.counter = 0
         self.direction = 0
+        self.event = None
 
     def start(self, cap, fps=30):
         self.cap = cap
-        Clock.schedule_interval(self.update, 1.0 / fps)
+        self.event = Clock.schedule_interval(self.update, 1.0 / fps)
 
     def stop(self):
-        Clock.unschedule_interval(self.update)
+        if self.event:
+            Clock.unschedule(self.event)
         self.cap = None
 
     def update(self, dt):
@@ -90,15 +92,19 @@ class WorkingScreen(Screen, BoxLayout):
 
         def doexit(self):
             global cap
-            if cap != None:
-                cap.release()
-                cap = None
-            EventLoop.close()
+            self.ids.qrcam.stop()
 
 
 class Calendar(Screen):
+    def on_save(self, instance, value, date_range):
+        pass
+
+    def on_cancel(self, instance, value):
+        pass
+
     def show_cal(self):
         cal = MDDatePicker()
+        cal.bind(on_save=self.on_save, on_cancel=self.on_cancel)
         cal.open()
 
 
