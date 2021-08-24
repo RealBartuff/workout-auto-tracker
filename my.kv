@@ -30,7 +30,7 @@ WindowManager:
     Button:
         size_hint: 0.25, 0.25
         pos_hint: {"x": 0.4, "y": 0.3}
-        text: "CALENDAR"
+        text: "YOUR PROGRESS"
         on_release:
             app.root.current = "Calendar"
             root.manager.transition.direction = "left"
@@ -66,7 +66,7 @@ WindowManager:
             Button:
                 size_hint: 0.25, 0.25
                 pos_hint: {"x": 0.5, "top":1}
-                text: "STOP"
+                text: "PAUSE"
                 on_release:
                     app.root.current = "Menu"
                     root.manager.transition.direction = "right"
@@ -82,21 +82,16 @@ WindowManager:
 
 <Calendar>:
     name: "Calendar"
-    canvas.before:
-        Color:
-            rgba: (0, 0, 0, 1)
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
-    GridLayout:
-        cols: 1
+    BoxLayout:
+        orientation: "vertical"
         size: root.width, root.height
 
-        Button:
-            text: "Open calendar"
-            pos_hint: {"center_x": .5, "center_t": .5}
-            on_release: root.show_cal()
+        ProgressBar:
+            id: circle_bar
+            min: 0
+            max: 1
+            pos_hint: {"x": .1}
+            size_hint_x: .8
 
     GridLayout:
         cols: 1
