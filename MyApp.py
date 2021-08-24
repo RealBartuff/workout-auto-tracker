@@ -1,3 +1,5 @@
+import sys
+
 import kivy
 
 kivy.require('2.0.0')
@@ -25,7 +27,8 @@ class WindowManager(ScreenManager):
 
 
 class Menu(Screen):
-    pass
+    def end(self):
+        sys.exit(MyMainApp)
 
 
 class KivyCamera(Image):
@@ -38,8 +41,6 @@ class KivyCamera(Image):
         self.p_direction = 0
         self.s_direction = 0
         self.event = None
-        self.percent_pu = None
-        self.percent_su = None
 
     def start(self, cap, fps=30):
         self.cap = cap
@@ -51,7 +52,6 @@ class KivyCamera(Image):
         self.cap = None
 
     def update(self, dt):
-        kc = KivyCamera()
         return_value, frame = self.cap.read()
         img = detector.find_pose(frame, draw=True)
         lm_list = detector.get_position(frame, False)
@@ -60,8 +60,6 @@ class KivyCamera(Image):
             angle2 = detector.find_angle(img, 23, 25, 27)# trzy punkty do określenia kąta ze wzoru mediapipe
             percent_pu = np.interp(angle1, (190, 270), (0, 100))  # zakres ruchu w procentach
             percent_su = np.interp(angle2, (170, 110), (0, 100))
-            # kc.do_pups()
-            # kc.do_sups()
             try:
                 pushup_formula = (lm_list[13][2] - lm_list[11][2]) / (lm_list[15][2] - lm_list[13][2])
                 if pushup_formula > 0.9:
@@ -97,30 +95,6 @@ class KivyCamera(Image):
                 texture.flip_vertical()
             texture.blit_buffer(frame.tobytes(), colorfmt='bgr')
             self.canvas.ask_update()
-
-    # def do_pups(self):
-    #
-    #     if self.percent_pu == 100:
-    #         if self.direction == 0:
-    #             # counter += 0.5
-    #             self.direction = 1
-    #
-    #     if self.percent_pu == 0:
-    #         if self.direction == 1:
-    #             self.sit_counter += 1
-    #             self.direction = 0
-    #
-    # def do_sups(self):
-    #
-    #     if self.percent_su == 100:
-    #         if self.direction == 0:
-    #             # counter += 0.5
-    #             self.direction = 1
-    #
-    #     if self.percent_su == 0:
-    #         if self.direction == 1:
-    #             self.push_counter += 1
-    #             self.direction = 0
 
 
 cap = None
