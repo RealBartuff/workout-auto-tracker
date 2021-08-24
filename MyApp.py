@@ -50,6 +50,7 @@ class KivyCamera(Image):
         self.cap = None
 
     def update(self, dt):
+        kc = KivyCamera()
         return_value, frame = self.cap.read()
         img = detector.find_pose(frame, draw=True)
         lm_list = detector.get_position(frame, False)
@@ -60,12 +61,12 @@ class KivyCamera(Image):
             # squat_formula = (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2])
             self.percent_pu = np.interp(angle1, (190, 270), (0, 100))  # zakres ruchu w procentach
             self.percent_su = np.interp(angle2, (170, 110), (0, 100))
-            KivyCamera().do_pups()
-            KivyCamera().do_sups()
+            kc.do_pups()
+            kc.do_sups()
 
             # wyświetlanie powtórzeń na obrazie
-            cv2.putText(img, f"{self.sit_counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 50, 0), 5)
-            cv2.putText(img, f"{self.push_counter}", (20, 200), cv2.FONT_HERSHEY_DUPLEX, 4, (0, 205, 50), 5)
+            cv2.putText(img, f"{kc.sit_counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 50, 0), 5)
+            cv2.putText(img, f"{kc.push_counter}", (20, 200), cv2.FONT_HERSHEY_DUPLEX, 4, (0, 205, 50), 5)
 
         if return_value:
             texture = self.texture
