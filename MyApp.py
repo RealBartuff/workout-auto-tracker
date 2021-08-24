@@ -35,7 +35,8 @@ class KivyCamera(Image):
         self.cap = None
         self.push_counter = 0
         self.sit_counter = 0
-        self.direction = 0
+        self.p_direction = 0
+        self.s_direction = 0
         self.event = None
         self.percent_pu = None
         self.percent_su = None
@@ -57,16 +58,28 @@ class KivyCamera(Image):
         if len(lm_list) != 0:
             angle1 = detector.find_angle(img, 11, 13, 15)
             angle2 = detector.find_angle(img, 23, 25, 27)# trzy punkty do określenia kąta ze wzoru mediapipe
-            # pushup_formula = (lm_list[13][2] - lm_list[11][2]) / (lm_list[15][2] - lm_list[13][2])
-            # squat_formula = (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2])
-            self.percent_pu = np.interp(angle1, (190, 270), (0, 100))  # zakres ruchu w procentach
-            self.percent_su = np.interp(angle2, (170, 110), (0, 100))
-            kc.do_pups()
-            kc.do_sups()
+
+            squat_formula = (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2])
+            percent_pu = np.interp(angle1, (190, 270), (0, 100))  # zakres ruchu w procentach
+            percent_su = np.interp(angle2, (170, 110), (0, 100))
+            # kc.do_pups()
+            # kc.do_sups()
+            try:
+                pushup_formula = (lm_list[13][2] - lm_list[11][2]) / (lm_list[15][2] - lm_list[13][2])
+                if pushup_formula > 0.9:
+                    if self.p_direction == 0:
+                        # counter += 0.5
+                        self.p_direction = 1
+                if pushup_formula < 0.4:
+                    if self.p_direction == 1:
+                        self.push_counter += 1
+                        self.p_direction = 0
+            except ZeroDivisionError:
+                pass
 
             # wyświetlanie powtórzeń na obrazie
-            cv2.putText(img, f"{kc.sit_counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 50, 0), 5)
-            cv2.putText(img, f"{kc.push_counter}", (20, 200), cv2.FONT_HERSHEY_DUPLEX, 4, (0, 205, 50), 5)
+            # cv2.putText(img, f"{self.sit_counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 50, 0), 5)
+            cv2.putText(img, f"{self.push_counter}", (20, 200), cv2.FONT_HERSHEY_DUPLEX, 4, (0, 205, 50), 5)
 
         if return_value:
             texture = self.texture
@@ -77,29 +90,29 @@ class KivyCamera(Image):
             texture.blit_buffer(frame.tobytes(), colorfmt='bgr')
             self.canvas.ask_update()
 
-    def do_pups(self):
-
-        if self.percent_pu == 100:
-            if self.direction == 0:
-                # counter += 0.5
-                self.direction = 1
-
-        if self.percent_pu == 0:
-            if self.direction == 1:
-                self.sit_counter += 1
-                self.direction = 0
-
-    def do_sups(self):
-
-        if self.percent_su == 100:
-            if self.direction == 0:
-                # counter += 0.5
-                self.direction = 1
-
-        if self.percent_su == 0:
-            if self.direction == 1:
-                self.push_counter += 1
-                self.direction = 0
+    # def do_pups(self):
+    #
+    #     if self.percent_pu == 100:
+    #         if self.direction == 0:
+    #             # counter += 0.5
+    #             self.direction = 1
+    #
+    #     if self.percent_pu == 0:
+    #         if self.direction == 1:
+    #             self.sit_counter += 1
+    #             self.direction = 0
+    #
+    # def do_sups(self):
+    #
+    #     if self.percent_su == 100:
+    #         if self.direction == 0:
+    #             # counter += 0.5
+    #             self.direction = 1
+    #
+    #     if self.percent_su == 0:
+    #         if self.direction == 1:
+    #             self.push_counter += 1
+    #             self.direction = 0
 
 
 cap = None
