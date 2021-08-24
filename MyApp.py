@@ -18,8 +18,12 @@ from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
 from kivy.clock import Clock
 import cv2
+import sqlite3
+
 
 detector = pm.PoseDetector()
+conn = sqlite3.connect("record_trackDB.db")
+c = conn.cursor()
 
 
 class WindowManager(ScreenManager):
@@ -50,6 +54,7 @@ class KivyCamera(Image):
         if self.event:
             Clock.unschedule(self.event)
         self.cap = None
+
 
     def update(self, dt):
         return_value, frame = self.cap.read()
@@ -116,21 +121,43 @@ class WorkingScreen(Screen, BoxLayout):
 
 class Calendar(Screen, Widget):
     def push_counter(self):
+        c.execute('SELECT Pushups FROM RecordONE')
+        data = c.fetchone()
         current = self.ids.circle_bar.value
-        current += 0.25
+        current += data
         self.ids.circle_bar.value = current
         # update the label
         self.ids.push_ups.text = f"{int(current*100)}"
 
     def sit_counter(self):
+        c.execute('SELECT Situps FROM RecordONE')
+        data = c.fetchone()
         current = self.ids.line_bar.value
-        current += 0.25
+        current += data
         self.ids.line_bar.value = current
         # update the label
         self.ids.sit_ups.text = f"{int(current*100)}"
 
 
 kv = Builder.load_file("my.kv")
+
+
+def create_table():
+    c.execute('CREATE TABLE IF NOT EXISTS RecordONE (Pushups INTEGER, Situps INTEGER)')
+
+
+def data_entry():
+    pushups = KivyCamera().push_counter
+    situps = KivyCamera().sit_counter
+    c.execute("INSERT INTO RecordONE (Pushups, Situps) VALUES(?, ?)", (pushups, situps))
+    conn.commit()
+
+
+create_table()
+data_entry()
+
+c.close()
+conn.close()
 
 
 class MyMainApp(App):
