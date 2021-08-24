@@ -58,8 +58,6 @@ class KivyCamera(Image):
         if len(lm_list) != 0:
             angle1 = detector.find_angle(img, 11, 13, 15)
             angle2 = detector.find_angle(img, 23, 25, 27)# trzy punkty do określenia kąta ze wzoru mediapipe
-
-            squat_formula = (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2])
             percent_pu = np.interp(angle1, (190, 270), (0, 100))  # zakres ruchu w procentach
             percent_su = np.interp(angle2, (170, 110), (0, 100))
             # kc.do_pups()
@@ -70,15 +68,25 @@ class KivyCamera(Image):
                     if self.p_direction == 0:
                         # counter += 0.5
                         self.p_direction = 1
-                if pushup_formula < 0.4:
+                if pushup_formula < 0.35:
                     if self.p_direction == 1:
                         self.push_counter += 1
                         self.p_direction = 0
+
+                squat_formula = (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2])
+                if squat_formula > 0.9:
+                    if self.s_direction == 0:
+                        # counter += 0.5
+                        self.s_direction = 1
+                if squat_formula < 0.35:
+                    if self.s_direction == 1:
+                        self.sit_counter += 1
+                        self.s_direction = 0
             except ZeroDivisionError:
                 pass
 
             # wyświetlanie powtórzeń na obrazie
-            # cv2.putText(img, f"{self.sit_counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 50, 0), 5)
+            cv2.putText(img, f"{self.sit_counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 50, 0), 5)
             cv2.putText(img, f"{self.push_counter}", (20, 200), cv2.FONT_HERSHEY_DUPLEX, 4, (0, 205, 50), 5)
 
         if return_value:
