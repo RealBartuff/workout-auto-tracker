@@ -24,6 +24,8 @@ import sqlite3
 detector = pm.PoseDetector()
 conn = sqlite3.connect("record_trackDB.db")
 c = conn.cursor()
+p_cnt = 0
+s_cnt = 0
 
 
 class WindowManager(ScreenManager):
@@ -122,21 +124,21 @@ class WorkingScreen(Screen, BoxLayout):
 class Calendar(Screen, Widget):
     def push_counter(self):
         c.execute('SELECT Pushups FROM RecordONE')
-        data = c.fetchone()
+        data = c.fetchall()[-1]
         current = self.ids.circle_bar.value
         current += data
         self.ids.circle_bar.value = current
         # update the label
-        self.ids.push_ups.text = f"{int(current*100)}"
+        self.ids.push_ups.text = f"{int(current*100)}% Daily Push-ups Goal!"
 
     def sit_counter(self):
         c.execute('SELECT Situps FROM RecordONE')
-        data = c.fetchone()
+        data = c.fetchall()[-1]
         current = self.ids.line_bar.value
         current += data
         self.ids.line_bar.value = current
         # update the label
-        self.ids.sit_ups.text = f"{int(current*100)}"
+        self.ids.sit_ups.text = f"{int(current*100)}% Daily Sit-ups Goal!"
 
 
 kv = Builder.load_file("my.kv")
