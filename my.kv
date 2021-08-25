@@ -101,7 +101,6 @@ WindowManager:
         ProgressBar:
             id: circle_bar
             min: 0
-            max: 1
             pos_hint: {"x": .1}
             size_hint_x: .8
 
@@ -113,7 +112,6 @@ WindowManager:
         ProgressBar:
             id: line_bar
             min: 0
-            max: 1
             pos_hint: {"x": .1}
             size_hint_x: .8
 
@@ -147,6 +145,7 @@ WindowManager:
         pos_hint: {"x": .2, "top": 1}
 
     TextInput:
+        id: ile_pompek
         size_hint: 0.6, 0.1
         pos_hint: {"x": .2, "top": .8}
 
@@ -156,6 +155,7 @@ WindowManager:
         pos_hint: {"x": .2, "top": .7}
 
     TextInput:
+        id: ile_przysiad
         size_hint: 0.6, 0.1
         pos_hint: {"x": .2, "top": .5}
 
@@ -163,3 +163,5 @@ WindowManager:
         text: "Set my goals!"
         size_hint: 0.8, 0.2
         pos_hint: {"x": .1, "y": .1}
+        on_release:
+            root.set_goals()
