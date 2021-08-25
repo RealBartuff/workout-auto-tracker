@@ -11,8 +11,11 @@ import PoseModule as pm
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
+from kivy.properties import ObjectProperty
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.core.window import Window
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
@@ -56,7 +59,6 @@ class KivyCamera(Image):
         if self.event:
             Clock.unschedule(self.event)
         self.cap = None
-
 
     def update(self, dt):
         return_value, frame = self.cap.read()
@@ -121,6 +123,10 @@ class WorkingScreen(Screen, BoxLayout):
             self.ids.qrcam.stop()
 
 
+class P(FloatLayout):
+    pass
+
+
 class Calendar(Screen, Widget):
     def push_counter(self):
         c.execute('SELECT Pushups FROM RecordONE')
@@ -139,6 +145,11 @@ class Calendar(Screen, Widget):
         self.ids.line_bar.value = current
         # update the label
         self.ids.sit_ups.text = f"{int(current*100)}% Daily Sit-ups Goal!"
+
+    def show_popup(self):
+        show = P()
+        popup_window = Popup(title="Daily Workout Goals", content=show, size_hint=(None, None), size=(400, 400))
+        popup_window.open()
 
 
 kv = Builder.load_file("my.kv")

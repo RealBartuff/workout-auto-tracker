@@ -95,6 +95,7 @@ WindowManager:
 
         Label:
             id: push_ups
+            font_size: 30
             text: "0% Daily Push-ups Goal"
 
         ProgressBar:
@@ -106,6 +107,7 @@ WindowManager:
 
         Label:
             id: sit_ups
+            font_size: 30
             text: "0% Daily Sit-ups Goal"
 
         ProgressBar:
@@ -120,7 +122,7 @@ WindowManager:
             text: ""
 
     GridLayout:
-        cols: 1
+        cols: 2
         size_hint: 1, 0.2
 
         Button:
@@ -130,3 +132,34 @@ WindowManager:
             on_release:
                 app.root.current = "Menu"
                 root.manager.transition.direction = "right"
+
+        Button:
+            size_hint: 0.25, 0.25
+            pos_hint: {"x": 0.4, "y": 0.01}
+            text: "Set Your Daily Goals"
+            on_release:
+                root.show_popup()
+
+<P>:
+    Label:
+        text: "Daily Push-ups goal:"
+        size_hint: 0.6, 0.2
+        pos_hint: {"x": .2, "top": 1}
+
+    TextInput:
+        size_hint: 0.6, 0.1
+        pos_hint: {"x": .2, "top": .8}
+
+    Label:
+        text: "Daily Sit-ups goal:"
+        size_hint: 0.6, 0.2
+        pos_hint: {"x": .2, "top": .7}
+
+    TextInput:
+        size_hint: 0.6, 0.1
+        pos_hint: {"x": .2, "top": .5}
+
+    Button:
+        text: "Set my goals!"
+        size_hint: 0.8, 0.2
+        pos_hint: {"x": .1, "y": .1}
