@@ -53,15 +53,13 @@ class PushUps(Exercises):
     def do_rep(self, lm_list):
         pushup_formula = (lm_list[13][2] - lm_list[11][2]) / (lm_list[15][2] - lm_list[13][2])
         if pushup_formula > 0.9:
-            self.direction = 1
-        else:
-            self.direction = 0
+            if self.direction == 0:
+                self.direction = 1
 
         if pushup_formula < 0.35:
-            self.counter += 1
-            self.direction = 0
-        else:
-            self.direction = 1
+            if self.direction == 1:
+                self.counter += 1
+                self.direction = 0
 
     def show_reps(self, img):
         # label =
@@ -72,15 +70,13 @@ class SitUps(Exercises):
     def do_rep(self, lm_list):
         squat_formula = (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2])
         if squat_formula > 0.9:
-            self.direction = 1
-        else:
-            self.direction = 0
+            if self.direction == 0:
+                self.direction = 1
 
         if squat_formula < 0.35:
-            self.counter += 1
-            self.direction = 0
-        else:
-            self.direction = 1
+            if self.direction == 1:
+                self.counter += 1
+                self.direction = 0
 
     def show_reps(self, img):
         cv2.putText(img, f"{self.counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 150, 0), 5)
@@ -127,6 +123,7 @@ class KivyCamera(Image):
             for exercise in [self.push_ups, self.sit_ups]:
                 if exercise.is_motion(lm_list):
                     exercise.do_rep(lm_list)
+                    exercise.show_reps(img)
 
         if return_value:
             texture = self.texture
