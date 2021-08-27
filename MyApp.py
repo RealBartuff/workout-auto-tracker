@@ -45,38 +45,43 @@ class Exercises:
         self.counter = 0
         self.direction = 0
 
-    def is_motion(self, lm_list):
-        return lm_list[0] and lm_list[27]
-
 
 class PushUps(Exercises):
-    def do_rep(self, lm_list):
+    def do_rep(self, lm_list, img):
         pushup_formula = (lm_list[13][2] - lm_list[11][2]) / (lm_list[15][2] - lm_list[13][2])
+        angle1 = detector.find_angle(img, 11, 13, 15)
         if pushup_formula > 0.9:
             if self.direction == 0:
                 self.direction = 1
+                c.execute("UPDATE RecordOne SET Pushups=Pushups+? where Date=?", (self.counter / 2, date.today(),))
 
         if pushup_formula < 0.35:
             if self.direction == 1:
                 self.counter += 1
                 self.direction = 0
+        conn.commit()
 
     def show_reps(self, img):
-        # label =
         cv2.putText(img, f"{self.counter}", (20, 200), cv2.FONT_HERSHEY_DUPLEX, 4, (0, 205, 150), 5)
 
 
 class SitUps(Exercises):
-    def do_rep(self, lm_list):
+    def do_rep(self, lm_list, img):
         squat_formula = (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2])
-        if squat_formula > 0.9:
-            if self.direction == 0:
-                self.direction = 1
+        angle2 = detector.find_angle(img, 23, 25, 27)
+        try:
+            if squat_formula > 0.9:
+                if self.direction == 0:
+                    self.direction = 1
+                    c.execute("UPDATE RecordOne SET Situps+=? where Date=?", (self.counter / 2, date.today(), ))
 
-        if squat_formula < 0.35:
-            if self.direction == 1:
-                self.counter += 1
-                self.direction = 0
+            if squat_formula < 0.35:
+                if self.direction == 1:
+                    self.counter += 1
+                    self.direction = 0
+        except ZeroDivisionError:
+            pass
+        conn.commit()
 
     def show_reps(self, img):
         cv2.putText(img, f"{self.counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 150, 0), 5)
@@ -100,6 +105,8 @@ class KivyCamera(Image):
         if self.event:
             Clock.unschedule(self.event)
         self.cap = None
+        c.close()
+        conn.close()
 
     def start_day(self):
         c.execute('CREATE TABLE IF NOT EXISTS RecordONE (Pushups INTEGER, Situps INTEGER, Date TEXT)')
@@ -107,23 +114,17 @@ class KivyCamera(Image):
         c.execute("select * from RecordOne where Date=?", (today, ))
         if not len(c.fetchall()):
             c.execute("INSERT INTO RecordONE (Date) VALUES(?)", (today,))
-        conn.commit()
-        c.close()
-        conn.close()
 
     def update(self, dt):
         return_value, frame = self.cap.read()
         img = detector.find_pose(frame, draw=True)
         lm_list = detector.get_position(frame, False)
         if len(lm_list) != 0:
-            angle1 = detector.find_angle(img, 11, 13, 15)
-            angle2 = detector.find_angle(img, 23, 25, 27)# trzy punkty do określenia kąta ze wzoru mediapipe
-            percent_pu = np.interp(angle1, (190, 270), (0, 100))  # zakres ruchu w procentach
-            percent_su = np.interp(angle2, (170, 110), (0, 100))
-            for exercise in [self.push_ups, self.sit_ups]:
-                if exercise.is_motion(lm_list):
-                    exercise.do_rep(lm_list)
-                    exercise.show_reps(img)
+            try:
+                self.push_ups.do_rep(lm_list, img)
+                self.push_ups.show_reps(img)
+            except ZeroDivisionError:
+                pass
 
         if return_value:
             texture = self.texture
