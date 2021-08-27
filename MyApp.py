@@ -73,7 +73,7 @@ class SitUps(Exercises):
             if squat_formula > 0.9:
                 if self.direction == 0:
                     self.direction = 1
-                    c.execute("UPDATE RecordOne SET Situps+=? where Date=?", (self.counter / 2, date.today(), ))
+                    c.execute("UPDATE RecordOne SET Situps=Situps+? where Date=?", (self.counter / 2, date.today(), ))
 
             if squat_formula < 0.35:
                 if self.direction == 1:
