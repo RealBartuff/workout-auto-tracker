@@ -31,16 +31,16 @@ class PoseDetector():
                 height, width, c = img.shape
                 #print(id, lm)
                 cx, cy = int(lm.x * width), int(lm.y * height)
-                self.lm_list.append([id, cx, cy])
+                self.lm_list.append([id, cx, cy, lm.visibility])
                 if draw:
                     cv2.circle(img, (cx, cy), 7, (255,0,0), cv2.FILLED)
         return self.lm_list
 
     def find_angle(self, img, p1, p2, p3, draw=True):
         # Ustalenie punktów (landmarks)
-        x1, y1 = self.lm_list[p1][1:]
-        x2, y2 = self.lm_list[p2][1:]
-        x3, y3 = self.lm_list[p3][1:]
+        x1, y1 = self.lm_list[p1][1:-1]
+        x2, y2 = self.lm_list[p2][1:-1]
+        x3, y3 = self.lm_list[p3][1:-1]
 
         # wyliczenie kąta
         angle = math.degrees(math.atan2(y3-y2, x3-x2) - math.atan2(y1-y2, x1-x2))

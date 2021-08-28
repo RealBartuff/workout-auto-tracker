@@ -113,13 +113,20 @@ class KivyCamera(Image):
         today = date.today()
         c.execute("select * from RecordOne where Date=?", (today, ))
         if not len(c.fetchall()):
-            c.execute("INSERT INTO RecordONE (Date) VALUES(?)", (today,))
+            c.execute("INSERT INTO RecordONE (Pushups, Situps, Date) VALUES(?, ?, ?)", (0, 0, today))
 
     def update(self, dt):
         return_value, frame = self.cap.read()
         img = detector.find_pose(frame, draw=True)
         lm_list = detector.get_position(frame, False)
-        if len(lm_list) != 0:
+        if lm_list and lm_list[27][3] > 0.7:
+            try:
+                self.sit_ups.do_rep(lm_list, img)
+                self.sit_ups.show_reps(img)
+            except ZeroDivisionError:
+                pass
+
+        if lm_list and lm_list[15][3] > 0.9:
             try:
                 self.push_ups.do_rep(lm_list, img)
                 self.push_ups.show_reps(img)
@@ -157,25 +164,24 @@ class P(FloatLayout):
     def set_goals(self):
         pompki = self.ids.ile_pompek.text
         przysiady = self.ids.ile_przysiad.text
-        print("Pompki: ", pompki, "Przysiady: ", przysiady)
         self.ids.ile_pompek.text = ""
         self.ids.ile_przysiad.text = ""
 
 
 class Calendar(Screen, Widget):
     def push_counter(self):
-        c.execute('SELECT Pushups FROM RecordONE')
-        data = c.fetchall()[-1]
+        c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
+        data = c.fetchall()
         # self.ids.circle_bar.max =
         current = self.ids.circle_bar.value
         current += data
         self.ids.circle_bar.value = current
         # update the label
-        self.ids.push_ups.text = f"{int(current*100)}% Daily Push-ups Goal!"
+        self.ids.push_ups.text = "{}% Daily Push-ups Goal!".format(current)
 
     def sit_counter(self):
-        c.execute('SELECT Situps FROM RecordONE')
-        data = c.fetchall()[-1]
+        c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(), ))
+        data = c.fetchall()
         # self.ids.line_bar.max =
         current = self.ids.line_bar.value
         current += data
