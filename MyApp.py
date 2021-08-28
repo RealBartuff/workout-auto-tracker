@@ -161,33 +161,20 @@ class WorkingScreen(Screen, BoxLayout):
 
 
 class P(FloatLayout):
-    def set_goals(self):
-        pompki = self.ids.ile_pompek.text
-        przysiady = self.ids.ile_przysiad.text
-        self.ids.ile_pompek.text = ""
-        self.ids.ile_przysiad.text = ""
+    pass
 
 
 class Calendar(Screen, Widget):
-    def push_counter(self):
-        c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
-        data = c.fetchall()
-        # self.ids.circle_bar.max =
-        current = self.ids.circle_bar.value
-        current += data
-        self.ids.circle_bar.value = current
-        # update the label
-        self.ids.push_ups.text = "{}% Daily Push-ups Goal!".format(current)
+    c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
+    pups = c.fetchall()[-1][0]
+    push_reps = str("{} push-ups done today!".format(pups))
+    c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(),))
+    sits = c.fetchall()[-1][0]
+    sits_reps = str("{} sit-ups done today!".format(sits))
 
-    def sit_counter(self):
-        c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(), ))
-        data = c.fetchall()
-        # self.ids.line_bar.max =
-        current = self.ids.line_bar.value
-        current += data
-        self.ids.line_bar.value = current
-        # update the label
-        self.ids.sit_ups.text = f"{int(current*100)}% Daily Sit-ups Goal!"
+    def close_db(self):
+        c.close()
+        conn.close()
 
     def show_popup(self):
         show = P()
