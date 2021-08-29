@@ -36,6 +36,8 @@ class WindowManager(ScreenManager):
 
 class Menu(Screen):
     def end(self):
+        c.close()
+        conn.close()
         sys.exit(MyMainApp)
 
 
@@ -105,8 +107,6 @@ class KivyCamera(Image):
         if self.event:
             Clock.unschedule(self.event)
         self.cap = None
-        c.close()
-        conn.close()
 
     def start_day(self):
         c.execute('CREATE TABLE IF NOT EXISTS RecordONE (Pushups INTEGER, Situps INTEGER, Date TEXT)')
@@ -147,9 +147,6 @@ cap = None
 
 
 class WorkingScreen(Screen, BoxLayout):
-        def init_qrtest(self):
-            pass
-
         def dostart(self, *largs):
             global cap
             cap = cv2.VideoCapture(0)
@@ -168,16 +165,15 @@ class P(FloatLayout):
 class Calendar(Screen):
     message_p = StringProperty(str(0))
     message_s = StringProperty(str(0))
-
     def get_pups(self):
         c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
         pups = c.fetchall()[-1][0]
-        return int(pups)
+        return pups
 
     def get_sits(self):
         c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(),))
         sits = c.fetchall()[-1][0]
-        return int(sits)
+        return sits
 
     def show_popup(self):
         show = P()
