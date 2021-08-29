@@ -1,4 +1,5 @@
 #:kivy 2.0.0
+#:import Factory kivy.factory.Factory
 
 WindowManager:
     Menu:
@@ -96,31 +97,28 @@ WindowManager:
         Label:
             id: pushups
             font_size: 30
-            text: root.push_reps
 
         Label:
+            id: goals_pump
             font_size: 15
             size_hint_y: .2
-            text: "Your todays goal is: "
+            text: "Your todays goal is: " + root.message_p
 
         ProgressBar:
             id: pompkowy_bar
             min: 0
             pos_hint: {"x": .1}
             size_hint_x: .8
-            on_value:
-                app.root.current = 'Pops'
-                root.set_goals(self)
 
         Label:
             id: sit_ups
             font_size: 30
-            text: root.sits_reps
 
         Label:
+            id: goals_sits
             font_size: 15
             size_hint_y: .2
-            text: "Your todays goal is: "
+            text: "Your todays goal is: " + root.message_s
 
         ProgressBar:
             id: przysiadowy_bar
@@ -150,34 +148,47 @@ WindowManager:
             pos_hint: {"x": 0.4, "y": 0.01}
             text: "Set Your Daily Goals"
             on_release:
-                root.show_popup()
+                Factory.TestPop().open()
 
-<P>:
-    Label:
-        text: "Daily Push-ups goal:"
-        size_hint: 0.6, 0.2
-        pos_hint: {"x": .2, "top": 1}
+<TestPop@Popup>:
+    title: 'Set your daily goals:'
+    size_hint: .5, .5
+    BoxLayout:
+        orientation:
+            'vertical'
+        RelativeLayout:
+            TextInput:
+                id: ti
+                size_hint: .7, None
+                height: 30
+                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                multiline: False
+                hint_text: 'Enter number of push-ups'
+                on_text_validate:
+                    # close popup on enter in textinput
+                    app.root.get_screen("Calendar").message_p = self.text
+                    root.dismiss()
 
-    TextInput:
-        id: ile_pompek
-        size_hint: 0.6, 0.1
-        pos_hint: {"x": .2, "top": .8}
-        multiline: False
-        text: str(int())
-
-    Label:
-        text: "Daily Sit-ups goal:"
-        size_hint: 0.6, 0.2
-        pos_hint: {"x": .2, "top": .7}
-
-    TextInput:
-        id: ile_przysiad
-        size_hint: 0.6, 0.1
-        pos_hint: {"x": .2, "top": .5}
-        multiline: False
-        text: str(int())
-
-    Button:
-        text: "Set my goals!"
-        size_hint: 0.8, 0.2
-        pos_hint: {"x": .1, "y": .1}
+            TextInput:
+                id: tis
+                size_hint: .7, None
+                height: 30
+                pos_hint: {'center_y': 0.4, 'center_x': 0.5}
+                multiline: False
+                hint_text: 'Enter number of sit-ups'
+                on_text_validate:
+                    # close popup on enter in textinput
+                    app.root.get_screen("Calendar").message_s = self.text
+                    root.dismiss()
+        BoxLayout:
+            size_hint_y: None
+            height: 48
+            Button:
+                text: 'Set your goal!'
+                on_release:
+                    app.root.get_screen("Calendar").message_p = ti.text
+                    app.root.get_screen("Calendar").message_s = tis.text
+                    root.dismiss()
+            Button:
+                text: 'Cancel'
+                on_release: root.dismiss()

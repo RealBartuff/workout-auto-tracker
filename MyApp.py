@@ -12,7 +12,7 @@ import PoseModule as pm
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
@@ -161,20 +161,25 @@ class WorkingScreen(Screen, BoxLayout):
 
 
 class P(FloatLayout):
-    pass
+    def set_goals(self):
+        pass
 
 
-class Calendar(Screen, Widget):
-    c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
-    pups = c.fetchall()[-1][0]
-    push_reps = str("{} push-ups done today!".format(pups))
-    c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(),))
-    sits = c.fetchall()[-1][0]
-    sits_reps = str("{} sit-ups done today!".format(sits))
+class Calendar(Screen):
+    message_p = StringProperty(' Insert number here')
+    message_s = StringProperty(' Insert number here')
+    if not len((c.fetchall())):
+        pass
+    else:
+        c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
+        pups = c.fetchall()[-1][0]
+        push_reps = str("{} push-ups done today!".format(pups))
+        c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(),))
+        sits = c.fetchall()[-1][0]
+        sits_reps = str("{} sit-ups done today!".format(sits))
 
     def close_db(self):
         c.close()
-        conn.close()
 
     def show_popup(self):
         show = P()
