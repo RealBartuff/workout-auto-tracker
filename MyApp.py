@@ -165,15 +165,21 @@ class P(FloatLayout):
 class Calendar(Screen):
     message_p = StringProperty(str(0))
     message_s = StringProperty(str(0))
+
+    def __init__(self, **kwargs):
+        super(Calendar, self).__init__(**kwargs)
+        self.pups = 0
+        self.sits = 0
+
     def get_pups(self):
         c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
-        pups = c.fetchall()[-1][0]
-        return pups
+        self.pups = c.fetchall()[-1][0]
+        return int(self.pups)
 
     def get_sits(self):
         c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(),))
-        sits = c.fetchall()[-1][0]
-        return sits
+        self.sits = c.fetchall()[-1][0]
+        return int(self.sits)
 
     def show_popup(self):
         show = P()
