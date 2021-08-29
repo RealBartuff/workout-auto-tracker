@@ -166,20 +166,18 @@ class P(FloatLayout):
 
 
 class Calendar(Screen):
-    message_p = StringProperty(' Insert number here')
-    message_s = StringProperty(' Insert number here')
-    if not len((c.fetchall())):
-        pass
-    else:
+    message_p = StringProperty(str(0))
+    message_s = StringProperty(str(0))
+
+    def get_pups(self):
         c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
         pups = c.fetchall()[-1][0]
-        push_reps = str("{} push-ups done today!".format(pups))
+        return int(pups)
+
+    def get_sits(self):
         c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(),))
         sits = c.fetchall()[-1][0]
-        sits_reps = str("{} sit-ups done today!".format(sits))
-
-    def close_db(self):
-        c.close()
+        return int(sits)
 
     def show_popup(self):
         show = P()
@@ -197,9 +195,3 @@ class MyMainApp(App):
 
 if __name__ == '__main__':
     MyMainApp().run()
-
-
-
-"""update RecordOne set pushups = pushups+1 where date="2021-08-25"
-select * from RecordOne where Date="2021-08-25"
-select * from RecordOne where Date="2021-08-25" limit 1"""
