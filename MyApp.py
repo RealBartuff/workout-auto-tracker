@@ -4,20 +4,15 @@ import kivy
 
 kivy.require('2.0.0')
 
-import kivy.core.text
-import numpy as np
-import time
 from datetime import date
 import PoseModule as pm
 from kivy.app import App
-from kivy.uix.widget import Widget
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import StringProperty
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
-from kivy.core.window import Window
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
 from kivy.clock import Clock
