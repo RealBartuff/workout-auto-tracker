@@ -110,7 +110,7 @@ WindowManager:
             pos_hint: {"x": .1}
             size_hint_x: .8
             max: int(root.message_p)
-            value: root.get_pups()
+            on_max: self.value = int(root.get_pups())
 
         Label:
             id: sit_ups
@@ -128,7 +128,7 @@ WindowManager:
             pos_hint: {"x": .1}
             size_hint_x: .8
             max: int(root.message_s)
-            value: root.get_sits()
+            on_max: self.value = int(root.get_sits())
 
         Label:
             id: xxx

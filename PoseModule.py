@@ -4,7 +4,7 @@ import time
 import math
 
 
-class PoseDetector():
+class PoseDetector:
     def __init__(self, mode=False, upBody=False, smooth=True, detectionCon=0.5, trackCon=0.5):
         self.mode = mode
         self.upBody = upBody
@@ -64,7 +64,7 @@ class PoseDetector():
 
 
 def main():
-    cap = cv2.VideoCapture("videos/test.mp4")
+    cap = cv2.VideoCapture(0)
     pTime = 0
     detector = PoseDetector()
     while True:
