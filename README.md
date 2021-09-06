@@ -5,6 +5,7 @@ Although it is still work in progress you can download and run it. It works :)<b
 Things yet to apply I'm currently working on:<br />
 <br />
 
+- app works on different systems (right now it's only Windows 10)
 - more exercises recognition (right now it's pushups and squats)
 - easy access from UI to all data stored in data base
 - more accurate pose estimation
