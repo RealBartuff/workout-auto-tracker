@@ -102,7 +102,7 @@ WindowManager:
             id: goals_pump
             font_size: 20
             size_hint_y: .2
-            text: "Your todays goal is: " + root.message_p
+            text: "Your todays push-ups goal is: " + root.message_p
 
         ProgressBar:
             id: pompkowy_bar
@@ -120,7 +120,7 @@ WindowManager:
             id: goals_sits
             font_size: 20
             size_hint_y: .2
-            text: "Your todays goal is: " + root.message_s
+            text: "Your todays squats goal is: " + root.message_s
 
         ProgressBar:
             id: przysiadowy_bar
@@ -152,6 +152,7 @@ WindowManager:
             pos_hint: {"x": 0.4, "y": 0.01}
             text: "Set Your Daily Goals"
             on_release:
+                root.s_day()
                 Factory.TestPop().open()
 
 <TestPop@Popup>:
@@ -179,7 +180,7 @@ WindowManager:
                 height: 30
                 pos_hint: {'center_y': 0.4, 'center_x': 0.5}
                 multiline: False
-                hint_text: 'Enter number of sit-ups'
+                hint_text: 'Enter number of squats'
                 on_text_validate:
                     # close popup on enter in textinput
                     app.root.get_screen("Calendar").message_s = self.text

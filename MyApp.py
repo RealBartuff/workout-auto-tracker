@@ -166,6 +166,9 @@ class Calendar(Screen):
         self.pups = 0
         self.sits = 0
 
+    def s_day(self):
+        return KivyCamera.start_day(self)
+
     def get_pups(self):
         c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
         self.pups = c.fetchall()[-1][0]
