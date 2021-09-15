@@ -1,11 +1,12 @@
 import sys
-
 import kivy
+import cv2
+import sqlite3
+import PoseModule as pm
 
-kivy.require('2.0.0')
+kivy.require("2.0.0")
 
 from datetime import date
-import PoseModule as pm
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import StringProperty
@@ -16,8 +17,6 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
 from kivy.clock import Clock
-import cv2
-import sqlite3
 
 
 detector = pm.PoseDetector()
@@ -45,12 +44,20 @@ class Exercises:
 
 class PushUps(Exercises):
     def do_rep(self, lm_list, img):
-        pushup_formula = (lm_list[13][2] - lm_list[11][2]) / (lm_list[15][2] - lm_list[13][2])
+        pushup_formula = (lm_list[13][2] - lm_list[11][2]) / (
+            lm_list[15][2] - lm_list[13][2]
+        )
         angle1 = detector.find_angle(img, 11, 13, 15)
         if pushup_formula > 0.9:
             if self.direction == 0:
                 self.direction = 1
-                c.execute("UPDATE RecordOne SET Pushups=Pushups+? where Date=?", (self.counter / 2, date.today(),))
+                c.execute(
+                    "UPDATE RecordOne SET Pushups=Pushups+? where Date=?",
+                    (
+                        self.counter / 2,
+                        date.today(),
+                    ),
+                )
 
         if pushup_formula < 0.35:
             if self.direction == 1:
@@ -59,18 +66,34 @@ class PushUps(Exercises):
         conn.commit()
 
     def show_reps(self, img):
-        cv2.putText(img, f"{self.counter}", (20, 200), cv2.FONT_HERSHEY_DUPLEX, 4, (0, 205, 150), 5)
+        cv2.putText(
+            img,
+            f"{self.counter}",
+            (20, 200),
+            cv2.FONT_HERSHEY_DUPLEX,
+            4,
+            (0, 205, 150),
+            5,
+        )
 
 
 class SitUps(Exercises):
     def do_rep(self, lm_list, img):
-        squat_formula = (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2])
+        squat_formula = (lm_list[25][2] - lm_list[23][2]) / (
+            lm_list[27][2] - lm_list[25][2]
+        )
         angle2 = detector.find_angle(img, 23, 25, 27)
         try:
             if squat_formula > 0.9:
                 if self.direction == 0:
                     self.direction = 1
-                    c.execute("UPDATE RecordOne SET Situps=Situps+? where Date=?", (self.counter / 2, date.today(), ))
+                    c.execute(
+                        "UPDATE RecordOne SET Situps=Situps+? where Date=?",
+                        (
+                            self.counter / 2,
+                            date.today(),
+                        ),
+                    )
 
             if squat_formula < 0.35:
                 if self.direction == 1:
@@ -81,11 +104,18 @@ class SitUps(Exercises):
         conn.commit()
 
     def show_reps(self, img):
-        cv2.putText(img, f"{self.counter}", (20, 100), cv2.FONT_HERSHEY_DUPLEX, 4, (205, 150, 0), 5)
+        cv2.putText(
+            img,
+            f"{self.counter}",
+            (20, 100),
+            cv2.FONT_HERSHEY_DUPLEX,
+            4,
+            (205, 150, 0),
+            5,
+        )
 
 
 class KivyCamera(Image):
-
     def __init__(self, **kwargs):
         super(KivyCamera, self).__init__(**kwargs)
         self.cap = None
@@ -104,11 +134,16 @@ class KivyCamera(Image):
         self.cap = None
 
     def start_day(self):
-        c.execute('CREATE TABLE IF NOT EXISTS RecordONE (Pushups INTEGER, Situps INTEGER, Date TEXT)')
+        c.execute(
+            "CREATE TABLE IF NOT EXISTS RecordONE (Pushups INTEGER, Situps INTEGER, Date TEXT)"
+        )
         today = date.today()
-        c.execute("select * from RecordOne where Date=?", (today, ))
+        c.execute("select * from RecordOne where Date=?", (today,))
         if not len(c.fetchall()):
-            c.execute("INSERT INTO RecordONE (Pushups, Situps, Date) VALUES(?, ?, ?)", (0, 0, today))
+            c.execute(
+                "INSERT INTO RecordONE (Pushups, Situps, Date) VALUES(?, ?, ?)",
+                (0, 0, today),
+            )
 
     def update(self, dt):
         return_value, frame = self.cap.read()
@@ -134,7 +169,7 @@ class KivyCamera(Image):
             if not texture or texture.width != w or texture.height != h:
                 self.texture = texture = Texture.create(size=(w, h))
                 texture.flip_vertical()
-            texture.blit_buffer(frame.tobytes(), colorfmt='bgr')
+            texture.blit_buffer(frame.tobytes(), colorfmt="bgr")
             self.canvas.ask_update()
 
 
@@ -142,14 +177,14 @@ cap = None
 
 
 class WorkingScreen(Screen, BoxLayout):
-        def dostart(self, *largs):
-            global cap
-            cap = cv2.VideoCapture(0)
-            self.ids.qrcam.start(cap)
+    def dostart(self, *largs):
+        global cap
+        cap = cv2.VideoCapture(0)
+        self.ids.qrcam.start(cap)
 
-        def doexit(self):
-            global cap
-            self.ids.qrcam.stop()
+    def doexit(self):
+        global cap
+        self.ids.qrcam.stop()
 
 
 class P(FloatLayout):
@@ -170,18 +205,23 @@ class Calendar(Screen):
         return KivyCamera.start_day(self)
 
     def get_pups(self):
-        c.execute('SELECT Pushups FROM RecordONE where date=?', (date.today(), ))
+        c.execute("SELECT Pushups FROM RecordONE where date=?", (date.today(),))
         self.pups = c.fetchall()[-1][0]
         return int(self.pups)
 
     def get_sits(self):
-        c.execute('SELECT Situps FROM RecordONE where date=?', (date.today(),))
+        c.execute("SELECT Situps FROM RecordONE where date=?", (date.today(),))
         self.sits = c.fetchall()[-1][0]
         return int(self.sits)
 
     def show_popup(self):
         show = P()
-        popup_window = Popup(title="Daily Workout Goals", content=show, size_hint=(None, None), size=(400, 400))
+        popup_window = Popup(
+            title="Daily Workout Goals",
+            content=show,
+            size_hint=(None, None),
+            size=(400, 400),
+        )
         popup_window.open()
 
 
@@ -193,5 +233,5 @@ class MyMainApp(App):
         return kv
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     MyMainApp().run()
