@@ -18,9 +18,13 @@ while True:
     img = detector.find_pose(img, draw=True)
     lm_list = detector.get_position(img, False)
     if len(lm_list) != 0:
-        angle = detector.find_angle(img, 11, 13, 15)  # trzy punkty do określenia kąta ze wzoru mediapipe
-        squat_formula = (lm_list[13][2] - lm_list[11][2]) / (lm_list[15][2] - lm_list[13][2])
-        percent = np.interp(angle, (170, 110), (0, 100))    # zakres ruchu w procentach
+        angle = detector.find_angle(
+            img, 11, 13, 15
+        )  # trzy punkty do określenia kąta ze wzoru mediapipe
+        squat_formula = (lm_list[13][2] - lm_list[11][2]) / (
+            lm_list[15][2] - lm_list[13][2]
+        )
+        percent = np.interp(angle, (170, 110), (0, 100))  # zakres ruchu w procentach
         # print(angle, percent)
 
         # if wykonanie przysiadu:
@@ -34,7 +38,9 @@ while True:
                 direction = 0
 
         # wyświetlanie powtórzeń na obrazie
-        cv2.putText(img, f"{counter}", (50, 200), cv2.FONT_HERSHEY_PLAIN, 10, (255, 0, 0), 5)
+        cv2.putText(
+            img, f"{counter}", (50, 200), cv2.FONT_HERSHEY_PLAIN, 10, (255, 0, 0), 5
+        )
 
     # wyświetlanie fps
     # c_time = time.time()
@@ -43,5 +49,5 @@ while True:
     # cv2.putText(img, f"{fps}", (50, 200), cv2.FONT_HERSHEY_PLAIN, 15, (255, 0, 0), 5)
 
     cv2.imshow("Image", img)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord("q"):
         break
