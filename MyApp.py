@@ -2,7 +2,7 @@ import sys
 import kivy
 import cv2
 import sqlite3
-import PoseModule as pm
+import pose_module as pm
 
 kivy.require("2.0.0")
 

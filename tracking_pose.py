@@ -1,29 +1,33 @@
 import cv2
 import numpy as np
 import time
-import PoseModule as pm
+import pose_module as pm
 
-
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("videos/przysiad1.mp4")
 detector = pm.PoseDetector()
-
-p_time = 0
 counter = 0
 direction = 0
+p_time = 0
 
 while True:
     success, img = cap.read()
-    # img = cv2.resize(img, (540, 960))
+    img = cv2.resize(img, (540, 960))
     # img = cv2.imread("videos/squatt.jpg")
     img = detector.find_pose(img, draw=True)
     lm_list = detector.get_position(img, False)
     if len(lm_list) != 0:
+        # lewa noga
         angle = detector.find_angle(
-            img, 11, 13, 15
+            img, 23, 25, 27
         )  # trzy punkty do określenia kąta ze wzoru mediapipe
-        squat_formula = (lm_list[13][2] - lm_list[11][2]) / (
-            lm_list[15][2] - lm_list[13][2]
+        squat_formula = (lm_list[25][2] - lm_list[23][2]) / (
+            lm_list[27][2] - lm_list[25][2]
         )
+        # print("biodro", (lm_list[25][2] - lm_list[23][2]) / (lm_list[27][2] - lm_list[25][2]))
+        # print("kolano", lm_list[25][2])
+        # print("stopa", lm_list[27][2])
+        # # prawa noga
+        # detector.find_angle(img, 24, 26, 28)
         percent = np.interp(angle, (170, 110), (0, 100))  # zakres ruchu w procentach
         # print(angle, percent)
 
@@ -36,6 +40,7 @@ while True:
             if direction == 1:
                 counter += 1
                 direction = 0
+        # print(counter)
 
         # wyświetlanie powtórzeń na obrazie
         cv2.putText(
@@ -49,5 +54,4 @@ while True:
     # cv2.putText(img, f"{fps}", (50, 200), cv2.FONT_HERSHEY_PLAIN, 15, (255, 0, 0), 5)
 
     cv2.imshow("Image", img)
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
+    cv2.waitKey(1)
